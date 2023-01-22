@@ -49,6 +49,12 @@ const runDevServer = async ({
         directory: contentBase,
         watch: true,
       },
+      proxy: {
+        target: "https://your.home.assistant",
+        changeOrigin: true,
+        context: "/",
+        ws: true,
+      },
     },
     compiler
   );
@@ -98,6 +104,18 @@ gulp.task("webpack-watch-app", () => {
     path.join(paths.translations_src, "en.json"),
     gulp.series("create-translations", "copy-translations-app")
   );
+});
+
+gulp.task("webpack-dev-server", () => {
+  runDevServer({
+    compiler: webpack(
+      process.env.ES5
+        ? bothBuilds(createAppConfig, { isProdBuild: false })
+        : createAppConfig({ isProdBuild: false, latestBuild: true })
+    ),
+    contentBase: paths.app_output_root,
+    port: 8090,
+  });
 });
 
 gulp.task("webpack-prod-app", () =>

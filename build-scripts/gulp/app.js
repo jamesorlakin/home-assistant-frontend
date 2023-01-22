@@ -31,11 +31,7 @@ gulp.task(
       "build-locale-data"
     ),
     "copy-static-app",
-    env.useWDS()
-      ? "wds-watch-app"
-      : env.useRollup()
-      ? "rollup-watch-app"
-      : "webpack-watch-app"
+    process.env.DEVSERVER === "1" ? "webpack-dev-server" : "webpack-watch-app"
   )
 );
 
